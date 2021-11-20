@@ -9,7 +9,7 @@ import (
 func main() {
 	http.HandleFunc("/",
 		func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintln(w, "Hello, world!")
+			fmt.Fprintln(w, "Hello, world from v1.0.13!")
 		})
 	log.Fatalf(
 		"error: %s",

@@ -41,13 +41,13 @@ jobs:
     steps:
       - name: Add TAG_NAME env property
         run:  echo "TAG_NAME=`echo ${GITHUB_REF#refs/tags/}`" >> $GITHUB_ENV
-      - name: Open PR in Environment Repository for new App Version
+      - name: Open PR in Environment Repository for New App Release
         env:
-          ENV_REPO: ${{ github.event.repository.owner.name }}/example-environment
+          ENV_REPO: ${{ github.event.repository.owner.name }}/tug-sample-env
         uses: benc-uk/workflow-dispatch@v1.1
         with:
-          workflow: New Application Version
+          workflow: New App Release
           token: ${{ secrets.GITOPS }}
-          inputs: '{"tag_name": "${{ env.TAG_NAME }}", "app_repo": "${{ github.event.repository.name }}", "image": "ghcr.io/${{ github.repository }}:${{github.ref_name}}" '
+          inputs: '{"tag_name": "${{ env.TAG_NAME }}", "app_repo": "${{ github.event.repository.name }}", "image": "ghcr.io/${{ github.repository }}:${{github.ref_name}}" }'
           ref: refs/heads/main
           repo: ${{ env.ENV_REPO }}

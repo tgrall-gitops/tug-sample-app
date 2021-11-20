@@ -24,6 +24,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           dockerfile: Dockerfile
+          repository: ${{ github.event.repository.name }}
           tag_with_ref: true
           tag_with_sha: true
 

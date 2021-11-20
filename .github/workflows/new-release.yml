@@ -48,6 +48,6 @@ jobs:
         with:
           workflow: New Application Version
           token: ${{ secrets.GITOPS }}
-          inputs: '{"tag_name": "${{ env.TAG_NAME }}", "app_repo": "${{ github.event.repository.name }}", "image": ""ghcr.io/${{ github.repository }}:${{github.ref_name" }}'
+          inputs: '{"tag_name": "${{ env.TAG_NAME }}", "app_repo": "${{ github.event.repository.name }}", "image": "ghcr.io/${{ github.repository }}:${{github.ref_name" }}'
           ref: refs/heads/main
           repo: ${{ env.ENV_REPO }}

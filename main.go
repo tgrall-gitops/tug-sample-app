@@ -7,10 +7,18 @@ import (
 )
 
 func main() {
+
 	http.HandleFunc("/",
 		func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintln(w, "Hello, world from v1.0.13!")
+			fmt.Fprintln(w, "Got to /api/hello")
 		})
+
+	http.HandleFunc("/api/hello",
+		func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Fprintln(w, "{ \"msg\" : \"Hello world\", \"version\" : \"v1.0.14\" }")
+		})
+
 	log.Fatalf(
 		"error: %s",
 		http.ListenAndServe(":8080", nil))

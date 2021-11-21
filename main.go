@@ -16,7 +16,7 @@ func main() {
 	http.HandleFunc("/api/hello",
 		func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
-			fmt.Fprintln(w, "{ \"msg\" : \"Hello world\", \"version\" : \"v1.0.14\" }")
+			fmt.Fprintln(w, "{ \"msg\" : \"Hello world\", \"version\" : \"v1.0.15\" }")
 		})
 
 	log.Fatalf(

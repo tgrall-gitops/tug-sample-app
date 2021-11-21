@@ -10,13 +10,8 @@ func main() {
 
 	http.HandleFunc("/",
 		func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintln(w, "Got to /api/hello")
-		})
-
-	http.HandleFunc("/api/hello",
-		func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
-			fmt.Fprintln(w, "{ \"msg\" : \"Hello world\", \"version\" : \"v1.0.15\" }")
+			fmt.Fprintln(w, "{ \"msg\" : \"Hello world\", \"version\" : \"v1.0.16\" }")
 		})
 
 	log.Fatalf(

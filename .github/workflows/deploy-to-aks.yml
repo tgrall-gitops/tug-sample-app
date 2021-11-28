@@ -1,0 +1,93 @@
+
+name : "Deploy to Azure Kubernetes Service (AKS)"
+
+on: 
+  workflow_call:
+    inputs:
+      resource-group:
+        required: true
+        type: string        
+      cluster-name:
+        required: true
+        type: string        
+      namespace:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+      app-name:
+        required: true
+        type: string
+    secrets:
+      client-id:
+        required: true
+      tenant-id:
+        required: true
+      subscription-id:      
+        required: true
+
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs: 
+
+  ## Adding multiple jobs for demo purposes
+  init-deployment:
+    runs-on: ubuntu-latest
+    steps:
+    - id: msg
+      name: " 👋  - Starting Deployment to AKS"
+      run : echo " 👋  - Starting Deployment to AKS"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [init-deployment]
+    environment: 
+      name: ${{inputs.environment}}   
+      url: ${{steps.kube-deploy.outputs.service-url}}    
+    steps:
+    - name: 'Az CLI login'
+      uses: azure/login@v1
+      with:
+          client-id: ${{ secrets.client-id }}
+          tenant-id: ${{ secrets.tenant-id }}
+          subscription-id: ${{ secrets.subscription-id }}
+  
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ inputs.branch }}
+
+    - name: Get AKS Credentials
+      id: getContext
+      run: |
+        az aks get-credentials --resource-group ${{ inputs.resource-group }} --name ${{ inputs.cluster-name }} --file $GITHUB_WORKSPACE/kubeconfig
+        echo "KUBECONFIG=$GITHUB_WORKSPACE/kubeconfig" >> $GITHUB_ENV      
+
+
+    - name: "🌩️ - Deploy to ${{inputs.namespace}}"
+      id: kube-deploy
+      run: |
+        kubectl create namespace ${{inputs.namespace}} --dry-run=client -o json | kubectl apply -f -                  
+        kubectl apply -f ./kubernetes/deployment.yml --namespace=${{ inputs.namespace }}
+        echo "🕚  - Wait 20s for service deployment"
+        sleep 20s
+        IP_SERVICE=$(kubectl get services -n ${{ inputs.namespace }}  -o json | jq -r '.items[] | select(.metadata.name == "${{ inputs.app-name }}") | .status.loadBalancer?|.ingress[]?|.ip')
+        echo "IP_SERVICE=$IP_SERVICE" >> $GITHUB_ENV
+        echo "🏁 - Service ${{ github.repository }} update in ${{inputs.namespace}} : http://$IP_SERVICE:8080 "
+        echo "::set-output name=service-url::http://$IP_SERVICE:8080"     
+
+
+  deployment-done:
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    steps:
+    - id: msg
+      name: " 👋  - Finishing Deployment to AKS"
+      run : echo " 👋  - Finishing Deployment to AKS"

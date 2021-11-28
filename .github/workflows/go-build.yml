@@ -8,6 +8,8 @@ on:
 
 permissions:
   packages: write
+  id-token: write
+  contents: read
 
 jobs:
 
@@ -60,6 +62,7 @@ jobs:
 
   deploy-to-kubernetes:
     uses: tgrall/workflows/.github/workflows/deploy-to-aks.yml@main
+    needs: [ build-publish-docker-image ]
     with:
       resource-group: tgrall-demo
       cluster-name: tug-kube

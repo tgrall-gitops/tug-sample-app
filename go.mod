@@ -1,3 +1,3 @@
-module example/hello
+module tgrall/basic
 
 go 1.17

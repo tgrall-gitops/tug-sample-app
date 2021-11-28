@@ -1,0 +1,96 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+
+
+
+  build-publish-docker-image:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+
+      - name: GitHub Container Registry Login
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: octodemobo
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Container
+        id: container_publish
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          build-args: |
+            VERSION=1.0.0
+            REPOSITORY_NAME=${{ github.repository }}
+            revision=${{ github.sha }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{github.ref_name}}
+
+
+deploy-to-kubernetes:
+    runs-on: ubuntu-latest
+    needs: [ build-publish-docker-image ]
+    environment: 
+      name: production        
+      url: ${{steps.kube-deploy.outputs.service-url}}    
+    env:
+      AZ_RESOURCE_GROUP: "tgrall-demo"
+      AZ_CLUSTER_NAME: "tug-kube"
+      NAMESPACE: ${{ github.ref_name }}
+
+    steps:
+    - name: 'Az CLI login'
+      uses: azure/login@v1
+      with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get AKS Credentials
+      id: getContext
+      run: |
+        az aks get-credentials --resource-group ${{ env.AZ_RESOURCE_GROUP }} --name ${{ env.AZ_CLUSTER_NAME }} --file $GITHUB_WORKSPACE/kubeconfig
+        echo "KUBECONFIG=$GITHUB_WORKSPACE/kubeconfig" >> $GITHUB_ENV      
+
+
+    - name: "🌩️ - Deploy to Production"
+      id: kube-deploy
+      run: |
+        kubectl create namespace $NAMESPACE --dry-run=client -o json | kubectl apply -f -                  
+        kubectl apply -f ./kubernetes/deployment.yml --namespace=${{ env.NAMESPACE }}
+        IP_SERVICE=$(kubectl get services -n ${{ env.NAMESPACE }}  -o json | jq -r '.items[] | select(.metadata.name == "tug-sample-app") | .status.loadBalancer?|.ingress[]?|.ip')
+        echo "IP_SERVICE=$IP_SERVICE" >> $GITHUB_ENV
+        echo "🏁 - Service ${{ github.repository }} update in $NAMESPACE : http://$IP_SERVICE:8080 "
+        echo "::set-output name=service-url::http://$IP_SERVICE:8080"                    

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tug-sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tug-sample-app
+  template:
+    metadata:
+      labels:
+        app: tug-sample-app
+    spec:
+      containers:
+      - image: ghcr.io/tgrall-gitops/tug-sample-app:v1.0.0
+        imagePullPolicy: Always
+        name: tug-sample-app
+        ports:
+        - containerPort: 8080
+
+----
+# Expose tug-sample-app
+apiVersion: v1
+kind: Service
+metadata:
+  name: tug-sample-app
+  labels:
+    app: tug-sample-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: tug-sample-app
+

@@ -57,7 +57,7 @@ jobs:
             revision=${{ github.sha }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{github.ref_name}}
+            ghcr.io/${{ github.repository }}:1.0.0
 
 
   deploy-to-kubernetes:

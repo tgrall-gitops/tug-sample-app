@@ -61,7 +61,7 @@ jobs:
 
 
   deploy-to-kubernetes:
-    uses: tgrall/workflows/.github/workflows/deploy-to-aks.yml@main
+    uses: tgrall-gitops/tug-sample-app/.github/workflows/deploy-to-aks.yml@main
     needs: [ build-publish-docker-image ]
     with:
       resource-group: tgrall-demo

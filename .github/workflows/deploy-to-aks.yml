@@ -19,6 +19,11 @@ on:
       branch:
         required: true
         type: string
+    output:
+      service-url:
+        description: "URL to deployed service"
+        value: ${{ jobs.deploy.outputs.service-url }}
+    # Secrets : OIDC parameters
     secrets:
       client-id:
         required: true

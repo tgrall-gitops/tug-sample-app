@@ -19,7 +19,7 @@ on:
       branch:
         required: true
         type: string
-    output:
+    outputs:
       service-url:
         description: "URL to deployed service"
         value: ${{ jobs.deploy.outputs.service-url }}

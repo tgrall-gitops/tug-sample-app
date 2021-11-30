@@ -81,7 +81,7 @@ jobs:
       resource-group: tgrall-demo
       cluster-name: tug-kube
       namespace : development
-      environment : ${{ needs.set-context.outputs.namespace }} 
+      environment : environment
       branch : ${{ github.ref_name }}
     secrets:
       client-id: ${{ secrets.AZURE_CLIENT_ID }}

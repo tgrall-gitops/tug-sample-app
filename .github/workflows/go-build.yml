@@ -80,7 +80,7 @@ jobs:
     with:
       resource-group: tgrall-demo
       cluster-name: tug-kube
-      namespace : ${{ needs.set-context.outputs.environment }} 
+      namespace : development
       environment : ${{ needs.set-context.outputs.environment }} 
       branch : ${{ github.ref_name }}
     secrets:

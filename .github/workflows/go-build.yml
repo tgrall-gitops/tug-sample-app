@@ -68,7 +68,7 @@ jobs:
     steps:
       - id : step1
         run: |
-          echo "::set-output name=namespace::${{ github.ref_name=='main' ? 'default' : github.ref_name }}"
+          echo "::set-output name=namespace::${{ (github.ref_name=='main' ? 'default' : github.ref_name) }}"
           echo "::set-output name=environment::development"
 
 

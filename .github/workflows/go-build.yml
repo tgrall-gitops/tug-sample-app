@@ -84,7 +84,7 @@ jobs:
       - id : step1
         run: |
           echo "👋  - Setting up context"
-          echo "::set-output name=namespace:: $${{ env.KUBE_NAMESPACE }}"
+          echo "::set-output name=namespace:: $KUBE_NAMESPACE"
           echo "::set-output name=environment::development"
 
 

@@ -64,10 +64,11 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.step1.outputs.enviroment }}       
-      namespace: ${{ steps.step1.outputs.url }}
+      namespace: ${{ steps.step1.outputs.namespace }}
     steps:
       - id : step1
         run: echo "::set-output environment=development"
+        run: echo "::set-output namespace=$${{ github.ref_name }}"
 
 
   deploy-to-kubernetes:

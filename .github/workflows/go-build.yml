@@ -67,7 +67,7 @@ jobs:
       cluster-name: tug-kube
       namespace : production
       environment : production
-      branch : main
+      branch : ${{ github.ref_name }}
     secrets:
       client-id: ${{ secrets.AZURE_CLIENT_ID }}
       tenant-id: ${{ secrets.AZURE_TENANT_ID }}

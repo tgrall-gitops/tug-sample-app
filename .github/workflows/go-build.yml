@@ -65,13 +65,15 @@ jobs:
     with:
       resource-group: tgrall-demo
       cluster-name: tug-kube
-      namespace : ${{ (github.ref_name == "main" ? "staging" : github.ref_name ) }}
-      environment : ${{ (github.ref_name == "main" ? "staging" : "development") }}
+      namespace : staging
+      environment : staging
       branch : ${{ github.ref_name }}
     secrets:
       client-id: ${{ secrets.AZURE_CLIENT_ID }}
       tenant-id: ${{ secrets.AZURE_TENANT_ID }}
       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}      
+    env:
+      FOO :bar
 
 
   finish:

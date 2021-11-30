@@ -39,7 +39,7 @@ jobs:
     with:
       resource-group: tgrall-demo
       cluster-name: tug-kube
-      namespace : 
+      namespace : production
       environment : production
       branch : ${{ github.ref_name }}
     secrets:

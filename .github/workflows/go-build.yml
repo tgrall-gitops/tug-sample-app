@@ -68,7 +68,7 @@ jobs:
     steps:
       - id : step1
         run: |
-          echo "::set-output environment=development"
+          echo "::set-output environment=tug002"
 
       - id : step2
         run: |
@@ -81,7 +81,7 @@ jobs:
       resource-group: tgrall-demo
       cluster-name: tug-kube
       namespace : ${{ needs.set-context.outputs.environment }} 
-      environment : ${{ needs.set-context.outputs.environment }} 
+      environment : production 
       branch : ${{ github.ref_name }}
     secrets:
       client-id: ${{ secrets.AZURE_CLIENT_ID }}

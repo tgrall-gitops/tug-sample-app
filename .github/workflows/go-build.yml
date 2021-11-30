@@ -46,6 +46,13 @@ jobs:
           username: octodemobo
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: branches
+        run: |
+          echo GITHUB_REF $GITHUB_REF
+          echo GITHUB_BASE_REF $GITHUB_BASE_REF
+
+
+
       - name: Build and Push Container
         id: container_publish
         uses: docker/build-push-action@v2

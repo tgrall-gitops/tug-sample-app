@@ -78,6 +78,8 @@ jobs:
         run: |
           echo "KUBE_NAMESPACE=github.ref_name" >> $GITHUB_ENV
 
+      - un: |
+          echo "KUBE_NAMESPACE $KUBE_NAMESPACE |-- $env.KUBE_NAMESPACE "
   
       - id : step1
         run: |

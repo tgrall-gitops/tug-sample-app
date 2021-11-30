@@ -76,7 +76,8 @@ jobs:
     - name: "🌩️ - Deploy to ${{inputs.namespace}}"
       id: kube-deploy
       run: |
-        kubectl create namespace ${{inputs.namespace}} --dry-run=client -o json | kubectl apply -f -                  
+        kubectl create namespace ${{inputs.namespace}} --dry-run=client -o json | kubectl apply -f -                 
+        sed -i 's/IMAGE_TAG/${{inputs.branch}}/g' kubernetes/deployment.yml 
         kubectl apply -f ./kubernetes/deployment.yml --namespace=${{ inputs.namespace }}
         echo "🕚  - Wait 20s for service deployment"
         sleep 20s

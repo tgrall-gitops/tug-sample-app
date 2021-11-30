@@ -13,7 +13,7 @@ spec:
         app: tug-sample-app
     spec:
       containers:
-      - image: ghcr.io/tgrall-gitops/tug-sample-app:v1.0.0
+      - image: ghcr.io/tgrall-gitops/tug-sample-app:IMAGE_TAG
         imagePullPolicy: Always
         name: tug-sample-app
         env:

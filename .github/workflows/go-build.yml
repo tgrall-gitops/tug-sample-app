@@ -56,6 +56,9 @@ jobs:
         run: |
           echo 'BRANCH_NAME=${{ github.head_ref }}' >> GITHUB_ENV
 
+
+      - run:  echo BRANCH_NAME -- $BRANCH_NAME --
+
       - name: Build and Push Container
         id: container_publish
         uses: docker/build-push-action@v2

@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       namespace: ${{ steps.step1.outputs.namespace }}
-      environment: ${{ steps.step1.outputs.enviroment }}       
+      environment: ${{ steps.step1.outputs.environment }}       
     steps:
 
 
@@ -72,20 +72,20 @@ jobs:
         if: "github.ref_name=='main'"
         run: |
           echo "KUBE_NAMESPACE=staging" >> $GITHUB_ENV
+          echo "KUBE_ENVIRONMENT=staging" >> $GITHUB_ENV
 
       - name: "on feature branch"
         if: "github.ref_name!='main'"
         run: |
           echo "KUBE_NAMESPACE=github.ref_name" >> $GITHUB_ENV
+          echo "KUBE_ENVIRONMENT=development" >> $GITHUB_ENV
 
-      - run: |
-          echo "KUBE_NAMESPACE $KUBE_NAMESPACE -- $env.KUBE_NAMESPACE "
   
       - id : step1
         run: |
           echo "👋  - Setting up context"
-          echo "::set-output name=namespace:: $KUBE_NAMESPACE"
-          echo "::set-output name=environment::development"
+          echo "::set-output name=namespace::$KUBE_NAMESPACE"
+          echo "::set-output name=environment::$KUBE_ENVIRONMENT"
 
 
   deploy-to-kubernetes:

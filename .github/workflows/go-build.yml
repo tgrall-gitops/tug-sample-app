@@ -64,13 +64,15 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.step1.outputs.enviroment }}       
-      namespace: ${{ steps.step1.outputs.namespace }}
+      namespace: ${{ steps.step2.outputs.namespace }}
     steps:
       - id : step1
         run: |
           echo "::set-output environment=development"
-          echo "::set-output namespace=dev-tug"
 
+      - id : step2
+        run: |
+          echo "::set-output namespace=tug"
 
   deploy-to-kubernetes:
     uses: tgrall-gitops/tug-sample-app/.github/workflows/deploy-to-aks.yml@main

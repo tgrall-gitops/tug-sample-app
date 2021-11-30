@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ test ]
     outputs:
-      namespace: ${{ steps.set-branch-name.outputs.branch }}    
+      branch: ${{ steps.set-branch-name.outputs.branch }}    
       namespace: ${{ steps.set-kube-env.outputs.namespace }}
       environment: ${{ steps.set-kube-env.outputs.environment }}       
 

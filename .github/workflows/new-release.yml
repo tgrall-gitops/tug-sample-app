@@ -5,7 +5,7 @@ on:
       - v*
 
 jobs:
-  build:
+  build-publish-docker-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

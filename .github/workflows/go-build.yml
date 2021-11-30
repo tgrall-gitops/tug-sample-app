@@ -103,12 +103,12 @@ jobs:
 
   deploy-to-kubernetes:
     uses: tgrall-gitops/tug-sample-app/.github/workflows/deploy-to-aks.yml@main
-    needs: [ build-publish-docker-image, set-context ]
+    needs: [ build-publish-docker-image ]
     with:
       resource-group: tgrall-demo
       cluster-name: tug-kube
-      namespace : ${{ needs.set-context.outputs.namespace }}
-      environment : ${{ needs.set-context.outputs.environment }}
+      namespace : ${{ needs.build-publish-docker-image.outputs.namespace }}
+      environment : ${{ needs.build-publish-docker-image.outputs.environment }}
       branch : ${{ needs.build-publish-docker-image.outputs.branch }}
     secrets:
       client-id: ${{ secrets.AZURE_CLIENT_ID }}

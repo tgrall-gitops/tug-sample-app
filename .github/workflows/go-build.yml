@@ -69,7 +69,7 @@ jobs:
       - id : step1
         run: |
           echo "::set-output environment=development"
-          echo "::set-output namespace=$${{ github.ref_name }}"
+          echo "::set-output namespace=dev-tug"
 
 
   deploy-to-kubernetes:
@@ -78,7 +78,7 @@ jobs:
     with:
       resource-group: tgrall-demo
       cluster-name: tug-kube
-      namespace : staging
+      namespace : ${{ needs.set-context.outputs.namespace }} 
       environment : ${{ needs.set-context.outputs.environment }} 
       branch : ${{ github.ref_name }}
     secrets:

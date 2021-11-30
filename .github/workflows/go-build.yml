@@ -70,8 +70,14 @@ jobs:
 
       - name: "on main branch"
         if: "github.ref_name=='main'"
-        run |
+        run: |
           echo "KUBE_NAMESPACE=staging" >> $GITHUB_ENV
+
+      - name: "on feature branch"
+        if: "github.ref_name!='main'"
+        run: |
+          echo "KUBE_NAMESPACE=github.ref_name" >> $GITHUB_ENV
+
   
       - id : step1
         run: |

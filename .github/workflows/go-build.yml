@@ -66,9 +66,25 @@ jobs:
       namespace: ${{ steps.step1.outputs.namespace }}
       environment: ${{ steps.step1.outputs.enviroment }}       
     steps:
+
+
+      - name: "on main branch"
+        if: "github.ref_name=='main'"
+        run |
+          echo "KUBE_NAMESPACE=staging" >> $GITHUB_ENV
+
+      - name: "on feature branch"
+        if: "github.ref_name=='main'"
+        run |
+          echo "KUBE_NAMESPACE=github.ref_name" >> $GITHUB_ENV
+
+          
+      
+
       - id : step1
         run: |
-          echo "::set-output name=namespace::${{ (github.ref_name=='main' ? 'default' : github.ref_name) }}"
+          echo "👋  - Setting up context"
+          echo "::set-output name=namespace:: $${{ env.KUBE_NAMESPACE }}"
           echo "::set-output name=environment::development"
 
 

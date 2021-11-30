@@ -36,6 +36,9 @@ jobs:
     needs: [ test ]
     outputs:
       namespace: ${{ steps.set-branch-name.outputs.branch }}    
+      namespace: ${{ steps.set-kube-env.outputs.namespace }}
+      environment: ${{ steps.set-kube-env.outputs.environment }}       
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -77,13 +80,6 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{env.BRANCH_NAME}}
 
-  set-context:
-    runs-on: ubuntu-latest
-    outputs:
-      namespace: ${{ steps.step1.outputs.namespace }}
-      environment: ${{ steps.step1.outputs.environment }}       
-    steps:
-
       - name: "on main branch"
         if: "github.ref_name=='main'"
         run: |
@@ -93,11 +89,11 @@ jobs:
       - name: "on feature branch"
         if: "github.ref_name!='main'"
         run: |
-          echo "KUBE_NAMESPACE=github.ref_name" >> $GITHUB_ENV
+          echo "KUBE_NAMESPACE=$BRANCH_NAME" >> $GITHUB_ENV
           echo "KUBE_ENVIRONMENT=development" >> $GITHUB_ENV
 
   
-      - id : step1
+      - id : set-kube-env
         run: |
           echo "👋  - Setting up context"
           echo "::set-output name=namespace::$KUBE_NAMESPACE"

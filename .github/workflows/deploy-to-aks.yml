@@ -45,7 +45,9 @@ jobs:
     steps:
     - id: msg
       name: " 👋  - Starting Deployment to AKS"
-      run : echo " 👋  - Starting Deployment to AKS"
+      run : |
+        echo " 👋  - Starting Deployment to AKS"
+        echo " \t ${{ inputs.resource-group }} - ${{ inputs.cluster-name }} - ${{ inputs.namespace }} - ${{ inputs.environment }} - ${{ inputs.branch }}"
 
   deploy:
     runs-on: ubuntu-latest

@@ -67,7 +67,7 @@ jobs:
             revision=${{ github.sha }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:$BRANCH_NAME
+            ghcr.io/${{ github.repository }}:${{env.BRANCH_NAME}}
 
   set-context:
     runs-on: ubuntu-latest

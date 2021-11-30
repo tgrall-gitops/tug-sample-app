@@ -67,8 +67,9 @@ jobs:
       namespace: ${{ steps.step1.outputs.namespace }}
     steps:
       - id : step1
-        run: echo "::set-output environment=development"
-        run: echo "::set-output namespace=$${{ github.ref_name }}"
+        run: |
+          echo "::set-output environment=development"
+          echo "::set-output namespace=$${{ github.ref_name }}"
 
 
   deploy-to-kubernetes:

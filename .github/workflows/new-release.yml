@@ -39,8 +39,8 @@ jobs:
     with:
       resource-group: tgrall-demo
       cluster-name: tug-kube
-      namespace : ${{ (github.ref_name == "main" ? "staging" : github.ref_name }}
-      environment : ${{ (github.ref_name == "main" ? "staging" : "development" }}
+      namespace : 
+      environment : production
       branch : ${{ github.ref_name }}
     secrets:
       client-id: ${{ secrets.AZURE_CLIENT_ID }}

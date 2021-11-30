@@ -59,21 +59,31 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
 
+
+  set-context:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.step1.outputs.enviroment }}       
+      namespace: ${{ steps.step1.outputs.url }}
+    steps:
+      - id : step1
+        run: echo "::set-output environment=development"
+
+
   deploy-to-kubernetes:
     uses: tgrall-gitops/tug-sample-app/.github/workflows/deploy-to-aks.yml@main
-    needs: [ build-publish-docker-image ]
+    needs: [ build-publish-docker-image, set-context ]
     with:
       resource-group: tgrall-demo
       cluster-name: tug-kube
       namespace : staging
-      environment : staging
+      environment : ${{ needs.set-context.outputs.environment }} 
       branch : ${{ github.ref_name }}
     secrets:
       client-id: ${{ secrets.AZURE_CLIENT_ID }}
       tenant-id: ${{ secrets.AZURE_TENANT_ID }}
       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}      
-    env:
-      FOO :bar
+
 
 
   finish:

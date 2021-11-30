@@ -57,8 +57,7 @@ jobs:
             revision=${{ github.sha }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:$GITHUB_REF_NAME
-
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
 
   deploy-to-kubernetes:
     uses: tgrall-gitops/tug-sample-app/.github/workflows/deploy-to-aks.yml@main

@@ -16,13 +16,14 @@ spec:
       - image: ghcr.io/tgrall-gitops/tug-sample-app:v1.0.0
         imagePullPolicy: Always
         name: tug-sample-app
+        env:
+          - name: KUBE_NS
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace   
         ports:
         - containerPort: 8080
-      env:
-        - name: KUBE_NS
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace      
+   
 
 ---
 # Expose tug-sample-app

@@ -63,8 +63,8 @@ jobs:
   set-context:
     runs-on: ubuntu-latest
     outputs:
-      namespace: ${{ steps.step1.outputs.namespace }}
-      environment: ${{ steps.step1.outputs.environment }}       
+      namespace: ${{ steps.set-outputs.outputs.namespace }}
+      environment: ${{ steps.set-outputs.outputs.environment }}       
     steps:
 
 
@@ -81,7 +81,7 @@ jobs:
           echo "KUBE_ENVIRONMENT=development" >> $GITHUB_ENV
 
   
-      - id : step1
+      - id : set-outputs
         run: |
           echo "👋  - Setting up context"
           echo "::set-output name=namespace::$KUBE_NAMESPACE"

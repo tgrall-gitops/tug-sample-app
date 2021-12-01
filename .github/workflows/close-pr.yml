@@ -32,5 +32,5 @@ jobs:
       ## When the PR is closed the system deletes the namespace in kubernetes
       - name : Delete Kube Namespace
         run: |
-          kubectl delete namespace dev-pr-${{ github.head_ref }}          
+          kubectl delete namespace ${{ github.head_ref }}          
 

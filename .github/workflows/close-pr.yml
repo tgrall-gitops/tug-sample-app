@@ -10,10 +10,8 @@ jobs:
   decommission-dev:
     runs-on: ubuntu-latest
     env:
-      - name: AZ_RESOURCE_GROUP
-        value: tgrall-demo
-      - name: AZ_CLUSTER_NAME
-        value: tug-kube
+      AZ_RESOURCE_GROUP: tgrall-demo
+      AZ_CLUSTER_NAME: tug-kube
       
     steps:
 

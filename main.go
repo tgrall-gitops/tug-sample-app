@@ -17,7 +17,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 
 	namespace := os.Getenv("KUBE_NS")
 
-	p := Page{"Go Simple Application", "1.0.10", namespace}
+	p := Page{"Go Simple Application", "1.0.11", namespace}
 	t := template.New("Template")
 	t = template.Must(t.ParseFiles("static/page.tmpl"))
 	err := t.ExecuteTemplate(w, "layout", p)

@@ -1,0 +1,38 @@
+name: " Decommissioning development environment"
+
+on:
+  pull_request:
+    types: [closed]
+
+
+jobs:
+
+  decommission-dev:
+    runs-on: ubuntu-latest
+    env:
+      - name: AZ_RESOURCE_GROUP
+        value: tgrall-demo
+      - name: AZ_CLUSTER_NAME
+        value: tug-kube
+      
+    steps:
+
+      - name: 'AZ CLI login'
+        uses: azure/login@v1
+        with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+
+      - name: Get AKS Credentials
+        id: getContext
+        run: |
+          az aks get-credentials --resource-group ${{ env.AZ_RESOURCE_GROUP }} --name ${{ env.AZ_CLUSTER_NAME }} --file $GITHUB_WORKSPACE/kubeconfig
+          echo "KUBECONFIG=$GITHUB_WORKSPACE/kubeconfig" >> $GITHUB_ENV
+
+      ## When the PR is closed the system deletes the namespace in kubernetes
+      - name : Delete Kube Namespace
+        run: |
+          kubectl delete namespace dev-pr-${{ github.head_ref }}          
+
